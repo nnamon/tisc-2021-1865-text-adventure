@@ -11,6 +11,12 @@ import pathlib
 import sys
 import time
 import os
+import dill
+import pickletools
+import traceback
+import rabbit_conf
+import itertools
+import random
 
 
 # Constants
@@ -18,7 +24,6 @@ import os
 CURRENT_DIR = pathlib.Path(__file__).parent.absolute()
 STORIES_DIR = CURRENT_DIR / 'stories'
 ART = open(CURRENT_DIR / 'art' / 'art.ansi', 'rb').read()
-ENABLE_SLEEPS = False if os.getenv('ENABLE_SLEEPS', 'True') == 'False' else True
 START_LOCATION = 'bottom-of-a-pit'
 
 
@@ -38,16 +43,25 @@ def pprint(data, endl=b'\n'):
 def sleep(duration=0.5):
     '''Configurable sleep.
     '''
-    if ENABLE_SLEEPS:
+    if rabbit_conf.ENABLE_SLEEPS:
         time.sleep(duration)
 
 
 def letterwise_print(data):
     '''Prints a string with a nice console effect.
     '''
+    ansi_colors = itertools.cycle(['\u001b[{};1m'.format(i).encode() for i in range(31, 37)])
+    # Randomly advance the iterator.
+    for i in range(random.randint(0, 5)):
+        next(ansi_colors)
+    ansi_reset = b'\x1b[0m'
     for letter in data:
         if type(letter) is int:
             letter = bytes([letter])
+        if type(letter) is str:
+            letter = letter.encode()
+        if rabbit_conf.RAINBOW:
+            letter = next(ansi_colors) + letter + ansi_reset
         pprint(letter, endl='')
         sleep(0.008)
 
@@ -196,7 +210,8 @@ class LookCommand(Command):
         letterwise_print('You look around and see:')
         letterwise_print(desc)
         things = []
-        things += ['  * ' + i.name + ' (item)'for i in self.game.get_items()]
+        things += ['  * ' + i.name.replace('.item', '') + ' (item)' for i in self.game.get_items()
+                   if i.name.replace('.item', '') not in self.game.inventory]
         things += ['  * ' + i.name + ' (note)'for i in self.game.get_others()]
         if len(things):
             letterwise_print('There are the following things here:\n{}\n'.format('\n'.join(things)))
@@ -297,6 +312,133 @@ class ReadCommand(Command):
         return 'read' ==  arg
 
 
+class GetCommand(Command):
+    '''Gets an item from the ground in the current room.
+    '''
+
+    def __init__(self, game):
+        super().__init__(game)
+
+    def validate_stream(self, data):
+        '''Validates that the byte stream contains suitable dill serialized content.
+        '''
+        tests = {
+            'rabbithole': False,
+            'dill._dill': False,
+            'on_get': False,
+        }
+        try:
+            ops = pickletools.genops(data)
+            for op, arg, pos in ops:
+                if op.name == 'SHORT_BINUNICODE' and arg in tests:
+                    tests[arg] = True
+            for _, v in tests.items():
+                if not v:
+                    return False
+            return True
+        except:
+            traceback.print_exc()
+            return False
+
+    def run(self, args):
+        if len(args) < 2:
+            letterwise_print("You don't see that here.")
+            return
+        for i in self.game.get_items():
+            if (args[1] + '.item') == i.name and args[1] not in self.game.inventory:
+                got_something = True
+                # Check that the item must be serialized with dill.
+                item_data = open(i, 'rb').read()
+                if not self.validate_stream(item_data):
+                    letterwise_print('Seems like that item may be an illusion.')
+                    return
+                item = dill.loads(item_data)
+                letterwise_print("You pick up '{}'.".format(item.key))
+                self.game.inventory[item.key] = item
+                item.prepare(self.game)
+                item.on_get()
+                return
+
+        letterwise_print("You don't see that here.")
+
+    def help(self):
+        hstr = (
+            'Usage: read [note]\n'
+            'Reads a note on the ground.'
+        )
+        return ('get', hstr)
+
+    def key(self, arg):
+        return 'get' ==  arg
+
+
+class OptionsCommand(Command):
+    '''Set some game options.
+    '''
+
+    def __init__(self, game):
+        self.opts = {
+            'text_scroll': True,
+            'rainbow': False,
+        }
+        super().__init__(game)
+
+    def run(self, args):
+        if len(args) < 3:
+            # Print all options.
+            letterwise_print("The following options are available:")
+            for i, v in self.opts.items():
+                letterwise_print('  * {}: {}'.format(i, v))
+            return
+        if args[1] in self.opts:
+            if args[1] == 'text_scroll':
+                if args[2].lower() == 'false' or args[2].lower() == 'f' or args[2] == '0':
+                    self.opts['text_scroll'] = False
+                    rabbit_conf.ENABLE_SLEEPS = False
+                else:
+                    self.opts['text_scroll'] = True
+                    rabbit_conf.ENABLE_SLEEPS = True
+            elif args[1] == 'rainbow':
+                if args[2].lower() == 'false' or args[2].lower() == 'f' or args[2] == '0':
+                    self.opts['rainbow'] = False
+                    rabbit_conf.RAINBOW = False
+                else:
+                    self.opts['rainbow'] = True
+                    rabbit_conf.RAINBOW = True
+        else:
+            letterwise_print("I don't know what that option is.")
+
+    def help(self):
+        hstr = (
+            'Usage: options [key] [value]\n'
+            'Views and modifies game options.'
+        )
+        return ('options', hstr)
+
+    def key(self, arg):
+        return 'options' ==  arg
+
+
+class ExitCommand(Command):
+    '''Exit the game.
+    '''
+
+    def __init__(self, game):
+        super().__init__(game)
+
+    def run(self, args):
+        self.game.running = False
+
+    def help(self):
+        hstr = (
+            'Usage: exit\n'
+            'Exits from the game.'
+        )
+        return ('exit', hstr)
+
+    def key(self, arg):
+        return 'exit' ==  arg
+
 
 # Game Classes
 
@@ -307,11 +449,24 @@ class Item:
     suffix '.item'.
     '''
 
-    def __init__(self):
+    def __init__(self, key):
         '''Initialise a new instance of the item.
         '''
-        pass
+        self.key = key
 
+    def prepare(self, game):
+        '''Preparing the item for use with a particular game instance.
+
+        Run this first immediately after undilling.
+        '''
+        self.game = game
+
+    def on_get(self):
+        '''Hook to run when picking up the item.
+
+        Most likely used to add commands to the command list.
+        '''
+        pass
 
 
 class Game:
@@ -323,6 +478,7 @@ class Game:
         self.running = True
         self.location = STORIES_DIR
         self.history = []
+        self.inventory = {}
 
         # Setup some default commands.
         self.commands = []
@@ -331,6 +487,8 @@ class Game:
         self.commands.append(MoveCommand(self))
         self.commands.append(BackCommand(self))
         self.commands.append(ReadCommand(self))
+        self.commands.append(GetCommand(self))
+        self.commands.append(ExitCommand(self))
 
     def get_command(self, arg):
         '''Get a command if it exists by key.
