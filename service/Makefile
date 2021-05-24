@@ -1,0 +1,8 @@
+tag = tisc-2021-wonderland
+port = 1337
+
+build:
+	docker build -t $(tag) --file Dockerfile .
+
+run:
+	docker run -it --rm -p 1337:1337 $(tag)

@@ -1,0 +1,12 @@
+service downtherabbitholeservice
+{
+    disable = no
+    socket_type = stream
+    protocol    = tcp
+    wait        = no
+    user        = rabbit
+    bind        = 0.0.0.0
+    server      = /opt/wonderland/down-the-rabbithole/rabbithole.py
+    type        = UNLISTED
+    port        = 31337
+}
