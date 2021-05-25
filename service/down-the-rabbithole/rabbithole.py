@@ -17,6 +17,10 @@ import traceback
 import rabbit_conf
 import itertools
 import random
+import unicodedata
+import string
+
+from urllib.request import urlopen
 
 
 # Constants
@@ -26,8 +30,28 @@ STORIES_DIR = CURRENT_DIR / 'stories'
 ART = open(CURRENT_DIR / 'art' / 'art.ansi', 'rb').read()
 START_LOCATION = 'bottom-of-a-pit'
 
+VALID_ID_CHARS = "-_.() %s%s" % (string.ascii_letters, string.digits)
+ID_CHAR_LIMIT = 255
+
+POOL_OF_TEARS = "http://localhost:4000/api/v1/smoke"
+
 
 # Utilities
+
+def clean_identifiers(identifier, allowlist=VALID_ID_CHARS, replace=' '):
+    '''Sanitise identifiers.
+    '''
+    # replace spaces
+    for r in replace:
+        identifier = identifier.replace(r,'_')
+
+    # keep only valid ascii chars
+    cleaned_id = unicodedata.normalize('NFKD', identifier).encode('ASCII', 'ignore').decode()
+
+    # keep only whitelisted chars
+    cleaned_id = ''.join(c for c in cleaned_id if c in allowlist)
+    return cleaned_id[:ID_CHAR_LIMIT]
+
 
 def pprint(data, endl=b'\n'):
     '''Standardise writes as byte buffers.
@@ -63,7 +87,7 @@ def letterwise_print(data):
         if rabbit_conf.RAINBOW:
             letter = next(ansi_colors) + letter + ansi_reset
         pprint(letter, endl='')
-        sleep(0.008)
+        sleep(0.012)
 
     pprint('')
 
@@ -337,7 +361,8 @@ class GetCommand(Command):
                     return False
             return True
         except:
-            traceback.print_exc()
+            var = traceback.format_exc()
+            pprint(var)
             return False
 
     def run(self, args):
@@ -419,6 +444,81 @@ class OptionsCommand(Command):
         return 'options' ==  arg
 
 
+class TeleportCommand(Command):
+    '''Teleport to a location.
+    '''
+
+    def __init__(self, game):
+        super().__init__(game)
+
+    def run(self, args):
+        if len(args) < 2:
+            # Print location.
+            letterwise_print("You are currently at:")
+            letterwise_print(str(self.game.location.relative_to(STORIES_DIR)))
+            return
+
+        for i in args[1].strip().split('/'):
+            if i == '':
+                letterwise_print('Cannot travel through empty rooms. Pay attention to this!')
+                return
+        rel_path = STORIES_DIR / args[1]
+        if rel_path.exists() and rel_path.is_dir():
+            self.game.teleport(rel_path)
+            return
+
+        letterwise_print("I don't know where that is.")
+
+    def help(self):
+        hstr = (
+            'Usage: teleport [location]\n'
+            'Views current location or teleport to another.'
+        )
+        return ('teleport', hstr)
+
+    def key(self, arg):
+        return 'teleport' ==  arg
+
+
+class BlowSmokeCommand(Command):
+    '''Blows smoke to leave a mark on the world.
+    '''
+
+    def __init__(self, game):
+        super().__init__(game)
+
+    def run(self, args):
+        if len(args) < 3:
+            # Print location.
+            letterwise_print("What do you wish to say?")
+            return
+
+        letterwise_print('Smoke bellows from the lips of {} to form the words, "{}."'.format(
+            args[1], ' '.join(args[2:])))
+        letterwise_print('Curling and curling...')
+        uniqid = "{}-{}".format(self.game.location.name, args[1].replace('&', ''))
+        content = ' '.join(args[2:]).replace(' ', '%20').replace('&','')
+        url = "{}?cargs[]=wb&uniqid={}&content={}".format(POOL_OF_TEARS, uniqid, content)
+        response = urlopen(url)
+        response_contents = response.read()
+        if response_contents == b'OK':
+            letterwise_print('The words float up high into the air and eventually disappate.')
+        else:
+            letterwise_print('The words harden into pasty rocks and drop to the ground.')
+            letterwise_print('They spell:')
+            letterwise_print(response_contents)
+
+    def help(self):
+        hstr = (
+            'Usage: blowsmoke [your name] [your message]\n'
+            'Leave your mark on the universe.'
+        )
+        return ('blowsmoke', hstr)
+
+    def key(self, arg):
+        return 'blowsmoke' ==  arg
+
+
 class ExitCommand(Command):
     '''Exit the game.
     '''
@@ -489,6 +589,10 @@ class Game:
         self.commands.append(ReadCommand(self))
         self.commands.append(GetCommand(self))
         self.commands.append(ExitCommand(self))
+
+        # Setup admin commands for cheats.
+        if rabbit_conf.ENABLE_ADMIN:
+            self.commands.append(TeleportCommand(self))
 
     def get_command(self, arg):
         '''Get a command if it exists by key.
@@ -591,7 +695,11 @@ class Game:
         while self.running:
             # Evaluate the user input.
             user_line = readline('[{}] '.format(self.location.name))
-            self.evaluate(user_line)
+            try:
+                self.evaluate(user_line)
+            except:
+                var = traceback.format_exc()
+                pprint(var)
 
         letterwise_print('Goodbye!')
 

@@ -12,14 +12,19 @@ ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update
 RUN apt-get install -y python3.8 python3-pip
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
-RUN apt-get install -y ruby rails
+RUN apt-get install -y ruby ruby-dev rails
 RUN apt-get install -y net-tools
 RUN apt-get install -y build-essential
 RUN apt-get install -y xinetd
 RUN apt-get install -y openjdk-8-jre-headless
 
 # Some cool tools for hackers.
-RUN apt-get install -y curl netcat wget tmux
+RUN apt-get install -y curl netcat wget tmux vim
+
+# Setup the users.
+RUN useradd -m $USER1
+RUN useradd -m $USER2
+RUN useradd -m $USER3
 
 # Create and setup the base directory containing the vulnerable services.
 RUN mkdir $BASE_DIR
@@ -29,36 +34,44 @@ ADD a-mad-tea-party $BASE_DIR/a-mad-tea-party
 ADD utils $BASE_DIR/utils
 WORKDIR $BASE_DIR
 RUN chown -R root:root $BASE_DIR
-RUN chmod 755 $BASE_DIR
+RUN chmod -R 755 $BASE_DIR
+RUN chmod +x $BASE_DIR/utils/*
 
 # Setup the down-the-rabbithole service.
 RUN chmod +x $BASE_DIR/down-the-rabbithole/rabbithole.py
 RUN pip install -r $BASE_DIR/down-the-rabbithole/requirements.txt
+RUN cd $BASE_DIR/down-the-rabbithole/ && python generate_items.py
+
+# Setup the pool-of-tears service.
+RUN mkdir $BASE_DIR/logs
+RUN chown root:$USER2 $BASE_DIR/logs
+RUN chmod 775 $BASE_DIR/logs
+RUN chown -R root:$USER2 $BASE_DIR/pool-of-tears
+RUN chmod -R 770 $BASE_DIR/pool-of-tears/tmp
+RUN chmod -R 770 $BASE_DIR/pool-of-tears/log
+RUN chmod +x $BASE_DIR/pool-of-tears/run.sh
+RUN rm $BASE_DIR/pool-of-tears/Gemfile.lock
+RUN cd $BASE_DIR/pool-of-tears/ && bundle install
+RUN echo '*/4 * * * * mouse rm '$BASE_DIR'/logs/*' > /etc/crontab
 
 # Some protections
 RUN echo "$user     hard    nproc       40" >> /etc/security/limits.conf
 
-# Setup the flags and the accounts.
-RUN useradd -m $USER1
-RUN useradd -m $USER2
-RUN useradd -m $USER3
+# Setup the flags.
 # Flag 1 is from Arbitrary File Read from down-the-rabbithole.
 COPY flags/flag1 /home/$USER1/flag1
 # Flag 2 is from Arbitrary Code Execution from down-the-rabbithole.
 COPY flags/flag2 /home/$USER2/flag2
-# Flag 3 is from Arbitrary Code Execution from pool-of-tears.
-COPY flags/flag3 /home/$USER2/flag3
+# Flag 3 is from Arbitrary Code Execution from pool-of-tears. User needs to run the flag wrapper.
+COPY flags/flag3 /home/$USER3/flag3
 # Flag 4 is from Arbitrary Code Execution from a-mad-tea-party.
 COPY flags/flag4 /home/$USER3/flag4
 RUN chown -R root:$USER1 /home/$USER1
 RUN chown -R root:$USER2 /home/$USER2
 RUN chown -R root:$USER3 /home/$USER3
-RUN chmod -R 750 /home/$USER1
-RUN chmod -R 750 /home/$USER2
-RUN chmod -R 750 /home/$USER3
-RUN chmod 440 /home/$USER1/flag*
-RUN chmod 440 /home/$USER2/flag*
-RUN chmod 450 /home/$USER3/flag*
+RUN chmod -R 750 /home/*
+RUN chmod 440 /home/*/flag*
+
 # Setup the SUID mouse binary in the rabbit home to read the second flag.
 RUN printf '#include<stdio.h>\n#include <stdlib.h>\n\n \
 void main() \n \
@@ -77,6 +90,24 @@ RUN chown root:$USER2 /home/$USER1/flag2.bin
 RUN chmod 755 /home/$USER1/flag2.bin
 RUN chmod g+s /home/$USER1/flag2.bin
 
+# Setup the SUID hatter binary in the mouse home to read the third flag.
+RUN printf '#include<stdio.h>\n#include <stdlib.h>\n\n \
+void main() \n \
+{ \n \
+FILE *f = fopen("/home/'$USER3'/flag3", "rb"); \n \
+fseek(f, 0, SEEK_END); \n \
+long fsize = ftell(f); \n \
+fseek(f, 0, SEEK_SET); \n \
+char *string = malloc(fsize + 1); \n \
+fread(string, 1, fsize, f); \n \
+fclose(f); \n \
+string[fsize] = 0; \n \
+puts(string); \n \
+}' | gcc -o /home/$USER2/flag3.bin -xc -
+RUN chown root:$USER3 /home/$USER2/flag3.bin
+RUN chmod 755 /home/$USER2/flag3.bin
+RUN chmod g+s /home/$USER2/flag3.bin
+
 # Setup xinetd services.
 COPY ./xinetd-services/* /etc/xinetd.d/
 
@@ -84,4 +115,4 @@ COPY ./xinetd-services/* /etc/xinetd.d/
 EXPOSE $LISTEN_PORT
 
 # Finally run the services.
-# CMD ["/usr/sbin/xinetd", "-d"]
+# CMD ["$BASE_DIR/utils/main.sh"]
