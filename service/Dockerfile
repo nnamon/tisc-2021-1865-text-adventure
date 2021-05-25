@@ -50,7 +50,7 @@ RUN chown -R root:$USER2 $BASE_DIR/pool-of-tears
 RUN chmod -R 770 $BASE_DIR/pool-of-tears/tmp
 RUN chmod -R 770 $BASE_DIR/pool-of-tears/log
 RUN chmod +x $BASE_DIR/pool-of-tears/run.sh
-RUN rm $BASE_DIR/pool-of-tears/Gemfile.lock
+RUN rm -f $BASE_DIR/pool-of-tears/Gemfile.lock
 RUN cd $BASE_DIR/pool-of-tears/ && bundle install
 RUN echo '*/4 * * * * mouse rm '$BASE_DIR'/logs/*' > /etc/crontab
 
