@@ -8,6 +8,9 @@ ENV USER2=mouse
 ENV USER3=hatter
 ENV DEBIAN_FRONTEND="noninteractive"
 
+# Some protections
+RUN echo "$user     hard    nproc       40" >> /etc/security/limits.conf
+
 # Global Dependencies
 RUN apt-get update
 RUN apt-get install -y python3.8 python3-pip
@@ -50,12 +53,14 @@ RUN chown -R root:$USER2 $BASE_DIR/pool-of-tears
 RUN chmod -R 770 $BASE_DIR/pool-of-tears/tmp
 RUN chmod -R 770 $BASE_DIR/pool-of-tears/log
 RUN chmod +x $BASE_DIR/pool-of-tears/run.sh
-RUN rm -f $BASE_DIR/pool-of-tears/Gemfile.lock
 RUN cd $BASE_DIR/pool-of-tears/ && bundle install
-RUN echo '*/4 * * * * mouse rm '$BASE_DIR'/logs/*' > /etc/crontab
+RUN echo '*/4 * * * * mouse /usr/bin/rm '$BASE_DIR'/logs/*' > /etc/crontab
+RUN echo '*/4 * * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' > /etc/crontab
 
-# Some protections
-RUN echo "$user     hard    nproc       40" >> /etc/security/limits.conf
+# Setup the a-mad-tea-party service.
+COPY flags/invitation_code /home/$USER3/invitation_code
+COPY /a-mad-tea-party/an-unbirthday-invitation.letter /home/$USER2/an-unbirthday-invitation.letter
+RUN cat /home/$USER3/invitation_code >> /home/$USER2/an-unbirthday-invitation.letter
 
 # Setup the flags.
 # Flag 1 is from Arbitrary File Read from down-the-rabbithole.
@@ -110,6 +115,10 @@ RUN chmod g+s /home/$USER2/flag3.bin
 
 # Setup xinetd services.
 COPY ./xinetd-services/* /etc/xinetd.d/
+
+# Create a directory for players use.
+RUN mkdir -p /tmp/hackers_use_me
+RUN chmod 773 /tmp/hackers_use_me
 
 # Expose the single port for the only entry point (down-the-rabbithole)
 EXPOSE $LISTEN_PORT

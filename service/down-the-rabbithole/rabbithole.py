@@ -496,7 +496,7 @@ class BlowSmokeCommand(Command):
         letterwise_print('Smoke bellows from the lips of {} to form the words, "{}."'.format(
             args[1], ' '.join(args[2:])))
         letterwise_print('Curling and curling...')
-        uniqid = "{}-{}".format(self.game.location.name, args[1].replace('&', ''))
+        uniqid = "{}-{}".format(self.game.location.name, clean_identifiers(args[1]))
         content = ' '.join(args[2:]).replace(' ', '%20').replace('&','')
         url = "{}?cargs[]=wb&uniqid={}&content={}".format(POOL_OF_TEARS, uniqid, content)
         response = urlopen(url)
