@@ -4,6 +4,7 @@ import org.nustaq.serialization.FSTConfiguration;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import com.mad.hatter.proto.CakeProto;
+import org.apache.commons.codec.binary.Base64;
 
 
 /**
@@ -11,6 +12,7 @@ import com.mad.hatter.proto.CakeProto;
  *
  */
 public class App {
+
     static FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
 
     public static void main(String[] args) {
@@ -21,10 +23,9 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         // Create a cake with some simple defaults.
-        CakeProto cakep = CakeProto.newBuilder()
+        CakeProto.Builder cakep = CakeProto.newBuilder()
             .setName("Placeholder Name")
-            .setCandles(31337)
-            .build();
+            .setCandles(31337);
 
         // Print the Banner
         System.out.println("\n-- OH DON'T MIND THAT PISH POSH! --\n");
@@ -45,7 +46,7 @@ public class App {
         // Run the main loop.
         boolean running = true;
         while (running) {
-            System.out.println("[Cake Designer Interface v4.2.0]");
+            System.out.println("[Cake Designer Interface v4.2.1]");
             System.out.println("  1. Set Name.");
             System.out.println("  2. Set Candles.");
             System.out.println("  3. Set Top Caption.");
@@ -60,6 +61,11 @@ public class App {
             switch (choice) {
                 case 0:
                     running = false;
+                    break;
+                case 1:
+                    String name = scanner.next().trim();
+                    cakep.setName(name);
+                    System.out.println("Name set!");
                     break;
                 default:
                     System.out.println("That was not one of the options! Please listen!");

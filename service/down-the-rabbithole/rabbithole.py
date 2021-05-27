@@ -19,6 +19,7 @@ import itertools
 import random
 import unicodedata
 import string
+import signal
 
 from urllib.request import urlopen
 
@@ -158,6 +159,12 @@ def print_banner():
 
 
 def main():
+    # Setup some limit on how long a player can stay connected.
+    # 15 Minutes
+    seconds = 15 * 60
+    signal.alarm(seconds)
+
+    # Start the game for real.
     print_banner()
     game = Game()
     game.run_game()
