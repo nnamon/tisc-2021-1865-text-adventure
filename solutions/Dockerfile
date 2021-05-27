@@ -10,7 +10,7 @@ RUN apt-get install -y python3.8 python3-pip
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 RUN apt-get install -y net-tools
 RUN apt-get install -y build-essential
-RUN apt-get install -y openjdk-8-jre-headless
+RUN apt-get install -y openjdk-8-jdk-headless maven
 
 # Some cool tools for hackers.
 RUN apt-get install -y curl netcat wget tmux vim

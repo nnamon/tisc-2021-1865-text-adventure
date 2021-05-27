@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+option java_multiple_files = true;
+option java_package = "com.mad.hatter.proto";
+option java_outer_classname = "CakeProtos";
+
+message CakeProto {
+    optional string name = 1;
+    optional int32 candles = 2;
+    optional string top_caption = 3;
+    optional string side_caption = 4;
+    optional string flavour = 5;
+    repeated bytes fireworks = 6;
+}

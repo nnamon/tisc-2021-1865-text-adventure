@@ -6,3 +6,6 @@ build:
 
 run:
 	docker run -it --rm -p 31337:31337 $(tag)
+
+dev:
+	docker run -it --rm -p 31337:31337 -v `pwd`:/opt/wonderland/ $(tag)

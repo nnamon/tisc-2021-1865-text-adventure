@@ -19,7 +19,8 @@ RUN apt-get install -y ruby ruby-dev rails
 RUN apt-get install -y net-tools
 RUN apt-get install -y build-essential
 RUN apt-get install -y xinetd
-RUN apt-get install -y openjdk-8-jre-headless
+RUN apt-get install -y openjdk-8-jdk-headless maven
+RUN apt-get install -y protobuf-compiler
 
 # Some cool tools for hackers.
 RUN apt-get install -y curl netcat wget tmux vim
@@ -61,6 +62,7 @@ RUN echo '*/4 * * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' > /etc/crontab
 COPY flags/invitation_code /home/$USER3/invitation_code
 COPY /a-mad-tea-party/an-unbirthday-invitation.letter /home/$USER2/an-unbirthday-invitation.letter
 RUN cat /home/$USER3/invitation_code >> /home/$USER2/an-unbirthday-invitation.letter
+RUN cd $BASE_DIR/a-mad-tea-party && ./build.sh
 
 # Setup the flags.
 # Flag 1 is from Arbitrary File Read from down-the-rabbithole.
@@ -71,6 +73,7 @@ COPY flags/flag2 /home/$USER2/flag2
 COPY flags/flag3 /home/$USER3/flag3
 # Flag 4 is from Arbitrary Code Execution from a-mad-tea-party.
 COPY flags/flag4 /home/$USER3/flag4
+COPY flags/congratulations.txt /home/$USER3/congratulations.txt
 RUN chown -R root:$USER1 /home/$USER1
 RUN chown -R root:$USER2 /home/$USER2
 RUN chown -R root:$USER3 /home/$USER3
