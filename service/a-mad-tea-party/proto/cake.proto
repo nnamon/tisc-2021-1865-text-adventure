@@ -4,11 +4,22 @@ option java_multiple_files = true;
 option java_package = "com.mad.hatter.proto";
 option java_outer_classname = "CakeProtos";
 
-message CakeProto {
+message Cake {
     optional string name = 1;
     optional int32 candles = 2;
-    optional string top_caption = 3;
-    optional string side_caption = 4;
-    optional string flavour = 5;
-    repeated bytes fireworks = 6;
+    optional string caption = 3;
+    optional string flavour = 4;
+    repeated bytes fireworks = 5;
+
+    enum Decoration {
+        CHOCOLATE_SPRINKLES = 0;
+        RAINBOW_SPRINKLES = 1;
+        BOBA = 2;
+        NATA_DE_COCO = 3;
+        CHOCOLATE_CHIPS = 4;
+        WHIPPED_CREAM = 5;
+        TINY_HELLO_KITTY = 6;
+    }
+
+    repeated Decoration decorations = 6;
 }

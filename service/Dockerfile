@@ -59,8 +59,9 @@ RUN echo '*/4 * * * * mouse /usr/bin/rm '$BASE_DIR'/logs/*' > /etc/crontab
 RUN echo '*/4 * * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' > /etc/crontab
 
 # Setup the a-mad-tea-party service.
-COPY flags/invitation_code /home/$USER3/invitation_code
-COPY /a-mad-tea-party/an-unbirthday-invitation.letter /home/$USER2/an-unbirthday-invitation.letter
+RUN python -c 'import uuid;print(uuid.uuid4())' > /home/$USER3/invitation_code
+RUN python -c 'import os, sys;sys.stdout.buffer.write(os.urandom(32))' > /home/$USER3/secret
+COPY a-mad-tea-party/an-unbirthday-invitation.letter /home/$USER2/an-unbirthday-invitation.letter
 RUN cat /home/$USER3/invitation_code >> /home/$USER2/an-unbirthday-invitation.letter
 RUN cd $BASE_DIR/a-mad-tea-party && ./build.sh
 
@@ -77,7 +78,8 @@ COPY flags/congratulations.txt /home/$USER3/congratulations.txt
 RUN chown -R root:$USER1 /home/$USER1
 RUN chown -R root:$USER2 /home/$USER2
 RUN chown -R root:$USER3 /home/$USER3
-RUN chmod -R 750 /home/*
+RUN chmod -R 440 /home/*
+RUN chmod 550 /home/*
 RUN chmod 440 /home/*/flag*
 
 # Setup the SUID mouse binary in the rabbit home to read the second flag.
