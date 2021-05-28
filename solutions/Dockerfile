@@ -18,10 +18,13 @@ RUN apt-get install -y curl netcat wget tmux vim
 
 # Create and setup the base directory containing the vulnerable services.
 RUN mkdir $BASE_DIR
-ADD * $BASE_DIR/
+ADD . $BASE_DIR/
 
 # Setup the scripts.
 RUN pip install -r $BASE_DIR/requirements.txt
+
+# Build the private ysoserial fst fork.
+RUN cd $BASE_DIR/ysoserial-fst-private-master/ && mvn clean package -DskipTests
 
 # Setup volume.
 VOLUME $BASE_DIR
