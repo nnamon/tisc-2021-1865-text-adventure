@@ -9,7 +9,9 @@ ENV USER3=hatter
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Some protections
-RUN echo "$user     hard    nproc       40" >> /etc/security/limits.conf
+RUN echo "$USER1     hard    nproc       50" >> /etc/security/limits.conf
+RUN echo "$USER2     hard    nproc       50" >> /etc/security/limits.conf
+RUN echo "$USER3     hard    nproc       50" >> /etc/security/limits.conf
 
 # Global Dependencies
 RUN apt-get update
@@ -129,4 +131,4 @@ RUN chmod 773 /tmp/hackers_use_me
 EXPOSE $LISTEN_PORT
 
 # Finally run the services.
-# CMD ["$BASE_DIR/utils/main.sh"]
+ENTRYPOINT ["/opt/wonderland/utils/main.sh"]

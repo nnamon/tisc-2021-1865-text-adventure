@@ -2,7 +2,7 @@
 
 '''
 1865 Text Adventure
-Solution for Stage 2
+Solution for Stage 3
 
 '''
 

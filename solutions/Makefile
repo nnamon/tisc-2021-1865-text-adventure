@@ -4,4 +4,7 @@ build:
 	docker build -t $(tag) --file Dockerfile .
 
 run:
+	docker run -it --rm $(tag)
+
+dev:
 	docker run -it --rm -v `pwd`:/opt/wonderland/ $(tag)

@@ -52,7 +52,7 @@ public class App {
         // Get the invitation code and check it.
         System.out.print("Invitation Code: ");
         String user_invite = scanner.next().trim();
-        if (false && !user_invite.equals(invitation_code)) {
+        if (!user_invite.equals(invitation_code)) {
             System.out.println("That invitation code was wrong! Begone and good day!");
             return;
         }

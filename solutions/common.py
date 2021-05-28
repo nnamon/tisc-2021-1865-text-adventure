@@ -23,7 +23,7 @@ class Common:
         '''
         return Common(remote(ip, port))
 
-    # Game Related Helpers
+    # Rabbithole Game Related Helpers
 
     def init_connection(self):
         '''Gets rid of all the starting stuff.
