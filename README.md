@@ -1,5 +1,7 @@
 # 1865 Text Adventure
 
+*for TISC 2021 by Jeremy Heng*
+
 ## Overview
 
 
@@ -57,7 +59,7 @@ Update the flags in `../service/flags`. There should be four flags in total name
 
 Check that the process limits in `service/Dockerfile` are suitable for the CTF load. A lower number
 helps to prevent resource exhaustion attacks by annoying players but may interfere with the number
-of concurrent users supported.`
+of concurrent users supported.
 
 ```dockerfile
 # Some protections
@@ -66,6 +68,8 @@ RUN echo "$USER2     hard    nproc       50" >> /etc/security/limits.conf
 RUN echo "$USER3     hard    nproc       50" >> /etc/security/limits.conf
 ```
 
-### Testing
+### Building the Service
 
-AAAA
+### Running the Service
+
+## Running
