@@ -26,8 +26,8 @@ primitive that allows the attacker to create arbitrary game items. It also has R
 issues (`constantize` and `public_send`) which can lead to the invocation of arbitrary code. This is
 the `pool-of-tears` service.
 
-Finally, there is a locally running service that presents a 'tea party' interface that allows for
-the creation of a fancy cake. This cake object is mostly represented as a protobuf message but
+Finally, there is a locally running Java service that presents a 'tea party' interface that allows
+for the creation of a fancy cake. This cake object is mostly represented as a protobuf message but
 contains a bytes field encapsulating a `Fireworks` object. This object is stored as FST serialized
 data. The cake object can be exported as base64 encoded protobuf but is signed with an insecure
 keyed hash scheme allowing for hash length extension attacks. Since the base64 decoder drops invalid
@@ -104,35 +104,12 @@ These are some of the topics required to solve the entire challenge.
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
 
-## Setup
+## Services
 
-### Updates to the Codebase
+For more information on how to setup, build, and run the services, please see this
+[README](service/README.md).
 
-1. Update the flags in `../service/flags`. There should be four flags in total named `flag1` to
-`flag4`.
+## Solutions
 
-2. Check that the process limits in `service/Dockerfile` are suitable for the CTF load. A lower number
-helps to prevent resource exhaustion attacks by annoying players but may interfere with the number
-of concurrent users supported.
-
-```dockerfile
-# Some protections
-RUN echo "$USER1     hard    nproc       50" >> /etc/security/limits.conf
-RUN echo "$USER2     hard    nproc       50" >> /etc/security/limits.conf
-RUN echo "$USER3     hard    nproc       50" >> /etc/security/limits.conf
-```
-
-3. The default entry port is set to `31337`. To change this, the host bind port in
-`service/Makefile` can be changed.
-
-```makefile
-run:
-	docker run -it --rm -p <port>:31337 $(tag)
-```
-
-### Building the Service
-
-
-## Running
-
-
+For more information on how to build and run the solutions, please see this
+[README](solutions/README.md).
