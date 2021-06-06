@@ -111,5 +111,5 @@ For more information on how to setup, build, and run the services, please see th
 
 ## Solutions
 
-For more information on how to build and run the solutions, please see this
-[README](solutions/README.md).
+For the full writeup as well as more information on how to build and run the solutions, please see
+this [README](solutions/README.md).

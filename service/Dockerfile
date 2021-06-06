@@ -127,6 +127,9 @@ COPY ./xinetd-services/* /etc/xinetd.d/
 RUN mkdir -p /tmp/hackers_use_me
 RUN chmod 773 /tmp/hackers_use_me
 
+# Prevent user accounts from invoking some tools.
+RUN chmod 500 /usr/bin/ps /bin/ps
+
 # Expose the single port for the only entry point (down-the-rabbithole)
 EXPOSE $LISTEN_PORT
 
