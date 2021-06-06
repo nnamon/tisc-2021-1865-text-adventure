@@ -106,7 +106,7 @@ These are some of the topics required to solve the entire challenge.
 
 ## Services
 
-For more information on how to setup, build, and run the services, please see this
+For more information on the services and how to setup, build, and run them, please see this
 [README](service/README.md).
 
 ## Solutions
