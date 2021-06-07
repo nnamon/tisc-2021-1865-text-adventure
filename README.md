@@ -95,6 +95,8 @@ These are some of the topics required to solve the entire challenge.
 
 ## Recommended Challenge Stage Descriptions
 
+This section contains the recommended challenge stage descriptions as well as optional hints.
+
 ### 1865 Text Adventure - 1. Down the Rabbit Hole
 
 Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
@@ -148,7 +150,7 @@ Can you make strings into constants somehow? Do those constants mean anything to
 
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
-Attend the Mad Tea Party but come back with (whats in) the Hatter's head. Sometimes the end of a
+Attend the Mad Tea Party but come back with (what's in) the Hatter's head. Sometimes the end of a
 tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
 Do not eat that tiny Hello Kitty.
 

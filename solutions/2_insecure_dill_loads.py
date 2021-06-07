@@ -4,6 +4,51 @@
 1865 Text Adventure
 Solution for Stage 2
 
+The exploit hinges on the BlowSmokeCommand obtained when the golden-hookah has been retrieved.
+
+class BlowSmokeCommand(Command):
+    ...
+
+    def __init__(self, game):
+        super().__init__(game)
+
+    def run(self, args):
+        if len(args) < 3:
+            # Print location.
+            letterwise_print("What do you wish to say?")
+            return
+
+        letterwise_print('Smoke bellows from the lips of {} to form the words, "{}."'.format(
+            args[1], ' '.join(args[2:])))
+        letterwise_print('Curling and curling...')
+        uniqid = "{}-{}".format(self.game.location.name, clean_identifiers(args[1]))
+        content = ' '.join(args[2:]).replace(' ', '%20').replace('&','')
+        url = "{}?cargs[]=wb&uniqid={}&content={}".format(POOL_OF_TEARS, uniqid, content)
+        response = urlopen(url)
+        response_contents = response.read()
+        if response_contents == b'OK':
+            letterwise_print('The words float up high into the air and eventually disappate.')
+        else:
+            letterwise_print('The words harden into pasty rocks and drop to the ground.')
+            letterwise_print('They spell:')
+            letterwise_print(response_contents)
+    ...
+
+The command constructs requests of the form:
+
+http://localhost:4000/api/v1/smoke?cargs[]=wb&uniqid=XXXX-YYYY&content=ZZZZ
+
+Where:
+    XXXX - The location name
+    YYYY - The user specified name
+    ZZZZ - The user specified message
+
+This request creates a file at /opt/wonderland/logs named XXXX-YYYY with the contents of ZZZZ.
+
+Since this is a Rails service, URL encoded values can be passed.
+
+Using this mechanic, we can write a serialized Item with the suffix of '.item' to the directory and
+get it to trigger the deserialization payload.
 '''
 
 from pwn import *

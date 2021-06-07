@@ -96,8 +96,8 @@ def main():
     log.success('Flag 1:')
     log.success(flag1.decode('ascii'))
 
-    # Quit gracefully.
-    c.exit()
+    # Present an interactive prompt.
+    c.interactive()
 
 
 if __name__ == '__main__':

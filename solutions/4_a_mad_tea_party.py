@@ -4,6 +4,97 @@
 1865 Text Adventure
 Solution for Stage 4
 
+There are two vulnerabilities used in this stage:
+
+1. A hash length extension attack to extend protobuf data with an arbitrary field and forge the
+    hash digest.
+2. A FST deserialization vulnerability to trigger arbitrary code execution.
+
+The cake export functionality is implemented with the following code. Note that the raw protobuf
+wire data is encased in Base64 then appended to a secret key before hashing. Base64 can tolerate
+invalid characters so the hash length extension attack can work.
+
+    byte[] cake_data = cakep.build().toByteArray();
+    byte[] cake_b64 = Base64.encodeBase64(cake_data);
+
+    try {
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        byte[] combined = new byte[secret.length + cake_b64.length];
+        System.arraycopy(secret, 0, combined, 0, secret.length);
+        System.arraycopy(cake_b64, 0, combined, secret.length, cake_b64.length);
+        byte[] message_digest = md.digest(combined);
+        HashMap<String, String> hash_map = new HashMap<String, String>();
+        hash_map.put("digest", Hex.encodeHexString(message_digest));
+        hash_map.put("cake", Hex.encodeHexString(cake_b64));
+        String output = (new Gson()).toJson(hash_map);
+        System.out.println("Here's your cake to go:");
+        System.out.println(output);
+    } catch (NoSuchAlgorithmException e) {
+        System.out.println("What how can this be?!?");
+    }
+
+The corresponding import functionality is just the following performed in inverse with a check.
+
+    String saved = scanner.nextLine().trim();
+
+    try {
+
+        HashMap<String, String> hash_map = new HashMap<String, String>();
+        hash_map = (new Gson()).fromJson(saved, hash_map.getClass());
+        byte[] challenge_digest = Hex.decodeHex(hash_map.get("digest"));
+        byte[] challenge_cake_b64 = Hex.decodeHex(hash_map.get("cake"));
+        byte[] challenge_cake_data = Base64.decodeBase64(challenge_cake_b64);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        byte[] combined = new byte[secret.length + challenge_cake_b64.length];
+        System.arraycopy(secret, 0, combined, 0, secret.length);
+        System.arraycopy(challenge_cake_b64, 0, combined, secret.length,
+                challenge_cake_b64.length);
+        byte[] message_digest = md.digest(combined);
+
+        if (Arrays.equals(message_digest, challenge_digest)) {
+            Cake new_cakep = Cake.parseFrom(challenge_cake_data);
+            cakep.clear();
+            cakep.mergeFrom(new_cakep);
+            System.out.println("Cake successfully gotten!");
+        }
+        else {
+            System.out.println("Your saved cake went really bad...");
+        }
+
+    } catch (DecoderException e) {
+        System.out.println("What what what?!?");
+    } catch (InvalidProtocolBufferException e) {
+        System.out.println("No bueno!");
+    } catch (NoSuchAlgorithmException e) {
+        System.out.println("What how can this be?!?");
+    }
+
+Finally, the forged fireworks field can be triggered for deserialization with the eat menu option.
+
+    System.out.println("You eat the cake and you feel good!");
+
+    for (Cake.Decoration deco : cakep.getDecorationsList()) {
+        if (deco == Cake.Decoration.TINY_HELLO_KITTY) {
+            running = false;
+            System.out.println("A tiny Hello Kitty figurine gets lodged in your " +
+                    "throat. You get very angry at this and storm off.");
+            break;
+        }
+    }
+
+    if (cakep.getFireworksCount() == 0) {
+        System.out.println("Nothing else interesting happens.");
+    } else {
+        for (ByteString firework_bs : cakep.getFireworksList()) {
+            byte[] firework_data = firework_bs.toByteArray();
+            Firework firework = (Firework) conf.asObject(firework_data);
+            firework.fire();
+        }
+    }
+
+The FST serialization library is source-compatible with JDK serialization but differs in the binary
+format. Hence, already established deserialization gadgets work with FST.
 '''
 
 from pwn import *

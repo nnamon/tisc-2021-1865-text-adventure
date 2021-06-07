@@ -54,7 +54,7 @@ To run the container in the background.
 $ make daemon
 ```
 
-To run the container in the forground:
+To run the container in the foreground:
 
 ```shell
 $ make run
