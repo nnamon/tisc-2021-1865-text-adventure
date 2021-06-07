@@ -132,7 +132,7 @@ The important files in the service's directory are:
 
 Some facts to know about the service in the container:
 
-* The xinetd definition can be found in this [service file](../xinetd-services/down-the-rabbithole).
+* The xinetd definition can be found in this [service file](xinetd-services/down-the-rabbithole).
 * The user used to run this service is `rabbit`.
 * The service files will be located at `/opt/wonderland/down-the-rabbithole/`.
 * The reachable flags:
@@ -619,17 +619,207 @@ This service listens on port 4714 in the container and is only bound to localhos
 
 The important files in the service's directory are:
 
+* `an-unbirthday-invitation.letter` - The template to copy to `/home/mouse/` and appending the
+    invitation code.
+* `build.sh` - Build the protobuf defintions and compile the Maven project.
+* `run.sh` - Run the compiled Java JAR file with a timeout. This is the target for the xinetd
+    service.
+* `proto/` - Contains the protobuf definitions used in the application.
+* `tea-party/` - Contains the Maven project for the application and eventually also the build
+    artifacts after `build.sh` is run by the Dockerfile.
 
 #### Container
 
 Some facts to know about the service in the container:
 
-* The xinetd definition can be found in this [service file](../xinetd-services/a-mad-tea-party).
+* The xinetd definition can be found in this [service file](xinetd-services/a-mad-tea-party).
 * The user used to run this service is `hatter`.
 * The service files will be located at `/opt/wonderland/a-mad-tea-party/`.
 * The reachable flags:
     * `/home/hatter/flag4` - A text file, intended to be read with an arbitrary file read.
+* The source code to this application is intended to be read by the player as reversing a Java
+    application is not the objective of this challenge.
 
 #### Description
 
+When connecting to the service, an invitation code is prompted for. This invitation code is present
+in a letter at `/home/mouse/an-unbirthday-invitation.letter`.
 
+```shell
+$ cat /home/mouse/an-unbirthday-invitation.letter
+Dear French Mouse,
+
+    The March Hare and the Mad Hatter
+        request the pleasure of your company
+            for an tea party evening filled with
+                clocks, food, fiddles, fireworks & more
+
+
+    Last Month
+        25:60 p.m.
+            By the Stream, and Into the Woods
+                Also available by way of port 4714
+
+    Comfortable outdoor attire suggested
+
+PS: Dormouse will be there!
+
+By the way, please quote the following before entering the party:
+
+
+b320520d-eb5b-4c33-9257-a7ba0f55707c
+$
+```
+
+Note that this invitation code is determined at the Docker build time and will be different across
+different builds. Supplying this code to the prompt allows the player into the party.
+
+```shell
+$ nc localhost 4714
+Welcome to the March Hare's and Mad Hatter's Tea Party.
+It's your Unbirthday! Hopefully...
+Before we let you in, though... Why is a raven like a writing desk?
+Invitation Code: $ b320520d-eb5b-4c33-9257-a7ba0f55707c
+Correct! Welcome!
+Come on into the party! But first, let's design you a cake!
+
+[Cake Designer Interface v4.2.1]
+  1. Set Name.
+  2. Set Candles.
+  3. Set Caption.
+  4. Set Flavour.
+  5. Add Firework.
+  6. Add Decoration.
+
+  7. Cake to Go.
+  8. Go to Cake.
+  9. Eat Cake.
+
+  0. Leave the Party.
+
+[Your cake so far:]
+
+name: "A Plain Cake"
+candles: 31337
+flavour: "Vanilla"
+
+Choice: $
+```
+
+This main application is implemented at `tea-party/src/main/java/com/mad/hatter/App.java`. The gist
+of the entire program loop is that a virtual cake can be constructed by the player using a menu to
+customise each of the protobuf fields of the object.
+
+One of the most interesting aspects of the code is the export function, implemented as the following
+code snippet:
+
+```java
+            case 7:
+
+                byte[] cake_data = cakep.build().toByteArray();
+                byte[] cake_b64 = Base64.encodeBase64(cake_data);
+
+                try {
+                    MessageDigest md = MessageDigest.getInstance("SHA-512");
+                    byte[] combined = new byte[secret.length + cake_b64.length];
+                    System.arraycopy(secret, 0, combined, 0, secret.length);
+                    System.arraycopy(cake_b64, 0, combined, secret.length, cake_b64.length);
+                    byte[] message_digest = md.digest(combined);
+                    HashMap<String, String> hash_map = new HashMap<String, String>();
+                    hash_map.put("digest", Hex.encodeHexString(message_digest));
+                    hash_map.put("cake", Hex.encodeHexString(cake_b64));
+                    String output = (new Gson()).toJson(hash_map);
+                    System.out.println("Here's your cake to go:");
+                    System.out.println(output);
+                } catch (NoSuchAlgorithmException e) {
+                    System.out.println("What how can this be?!?");
+                }
+
+                break;
+```
+
+This export function generates a keyed hash from a secret and the Base64 encoded protobuf binary
+serialized from the `Cake` object. This attempt is intended to authenticate the integrity of the
+export when it is imported later. However, this construction is insecure and allows for the hash
+length extension attack where an attacker can tack on addition protobuf fields such as the
+`fireworks` field which contain FST serialized data.
+
+The counterpart import function is implemented like so:
+
+```java
+            case 8:
+
+                System.out.print("Please enter your saved cake: ");
+
+                scanner.nextLine();
+                String saved = scanner.nextLine().trim();
+
+                try {
+
+                    HashMap<String, String> hash_map = new HashMap<String, String>();
+                    hash_map = (new Gson()).fromJson(saved, hash_map.getClass());
+                    byte[] challenge_digest = Hex.decodeHex(hash_map.get("digest"));
+                    byte[] challenge_cake_b64 = Hex.decodeHex(hash_map.get("cake"));
+                    byte[] challenge_cake_data = Base64.decodeBase64(challenge_cake_b64);
+
+                    MessageDigest md = MessageDigest.getInstance("SHA-512");
+                    byte[] combined = new byte[secret.length + challenge_cake_b64.length];
+                    System.arraycopy(secret, 0, combined, 0, secret.length);
+                    System.arraycopy(challenge_cake_b64, 0, combined, secret.length,
+                            challenge_cake_b64.length);
+                    byte[] message_digest = md.digest(combined);
+
+                    if (Arrays.equals(message_digest, challenge_digest)) {
+                        Cake new_cakep = Cake.parseFrom(challenge_cake_data);
+                        cakep.clear();
+                        cakep.mergeFrom(new_cakep);
+                        System.out.println("Cake successfully gotten!");
+                    }
+                    else {
+                        System.out.println("Your saved cake went really bad...");
+                    }
+
+                } catch (DecoderException e) {
+                    System.out.println("What what what?!?");
+                } catch (InvalidProtocolBufferException e) {
+                    System.out.println("No bueno!");
+                } catch (NoSuchAlgorithmException e) {
+                    System.out.println("What how can this be?!?");
+                }
+
+                break;
+```
+
+The attacker can abuse the behaviour of many Base64 decoders that ignore invalid characters to get
+around the padding present when performing the hash length extension attack. This allows the
+creation of a `Cake` with a controlled `fireworks` field.
+
+Finally, eating the cake triggers some key events. The bytes list of `fireworks` is converted to
+actual `Fireworks`s object with the `FSTConfiguration.asObject` deserializer and the `fire()`
+function is invoked. If a specially constructed payload is deserialized, arbitrary code execution
+can occur. This is implemented like so:
+
+```java
+            case 9:
+                System.out.println("You eat the cake and you feel good!");
+
+                for (Cake.Decoration deco : cakep.getDecorationsList()) {
+                    if (deco == Cake.Decoration.TINY_HELLO_KITTY) {
+                        running = false;
+                        System.out.println("A tiny Hello Kitty figurine gets lodged in your " +
+                                "throat. You get very angry at this and storm off.");
+                        break;
+                    }
+                }
+
+                if (cakep.getFireworksCount() == 0) {
+                    System.out.println("Nothing else interesting happens.");
+                } else {
+                    for (ByteString firework_bs : cakep.getFireworksList()) {
+                        byte[] firework_data = firework_bs.toByteArray();
+                        Firework firework = (Firework) conf.asObject(firework_data);
+                        firework.fire();
+                    }
+                }
+                break;
+```
