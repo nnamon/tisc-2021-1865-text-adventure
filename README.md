@@ -97,12 +97,70 @@ These are some of the topics required to solve the entire challenge.
 
 ### 1865 Text Adventure - 1. Down the Rabbit Hole
 
+Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
+We want to learn more about the White Rabbit but when we connect to the game, we just keep getting
+lost! Can you help us take a look at the secrets in the Rabbit's burrow?
+
+The game is hosted at `<CHANGE ME>:31337`.
+
+#### Hint 1
+
+The goal is to read `flag1` from `/home/rabbit/`.
+
+#### Hint 2
+
+Can you find a way to break out of the illusionary fantasy? Instant travel can be a very good way of
+defying the laws of physics.
+
 ### 1865 Text Adventure - 2. Pool of Tears
+
+It looks like the Rabbit has been misbehaving. Within his cache of secrets lies a special device
+that does not belong to him. However, our attempts read it yield gibberish. It appears to require...
+activation. To activate it, we must first become Rabbit.
+
+Please assume the identity of the Rabbit.
+
+The game is hosted at `<CHANGE ME>:31337`.
+
+#### Hint 1
+
+The goal is to execute the SUID binary `flag2.bin` at `/home/rabbit/`.
+
+#### Hint 2
+
+Find a way to write what you want then take it. If sauerkraut doesn't work, try kimchi.
 
 ### 1865 Text Adventure - 3. Advice from a Caterpillar
 
+The flowers said that the French Mouse was invited. But to what? Perhaps she hid the invitation in
+her warren. It is said that her home is decorated with all sorts of oddly shaped mirrors but the
+tragic thing is that she's afraid of her own reflection.
+
+The game is hosted at `<CHANGE ME>:31337`.
+
+#### Hint 1
+
+The goal is to execute the SUID binary `flag3.bin` at `/home/mouse/`.
+
+#### Hint 2
+
+Can you make strings into constants somehow? Do those constants mean anything to Ruby?
+
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
+Attend the Mad Tea Party but come back with (whats in) the Hatter's head. Sometimes the end of a
+tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
+Do not eat that tiny Hello Kitty.
+
+The game is hosted at `<CHANGE ME>:31337`.
+
+#### Hint 1
+
+The goal is to read `flag4` from `/home/hatter`.
+
+#### Hint 2
+
+You may not know the key but you know the length! Faster unpacking doesn't mean safer unpacking.
 
 ## Services
 
