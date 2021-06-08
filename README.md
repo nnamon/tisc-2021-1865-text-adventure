@@ -105,6 +105,8 @@ lost! Can you help us take a look at the secrets in the Rabbit's burrow?
 
 The game is hosted at `<CHANGE ME>:31337`.
 
+NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+
 #### Hint 1
 
 The goal is to read `flag1` from `/home/rabbit/`.
@@ -124,6 +126,8 @@ Please assume the identity of the Rabbit.
 
 The game is hosted at `<CHANGE ME>:31337`.
 
+NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+
 #### Hint 1
 
 The goal is to execute the SUID binary `flag2.bin` at `/home/rabbit/`.
@@ -140,6 +144,8 @@ tragic thing is that she's afraid of her own reflection.
 
 The game is hosted at `<CHANGE ME>:31337`.
 
+NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+
 #### Hint 1
 
 The goal is to execute the SUID binary `flag3.bin` at `/home/mouse/`.
@@ -155,6 +161,8 @@ tale might not be the end of the story. Things that don't make logical sense can
 Do not eat that tiny Hello Kitty.
 
 The game is hosted at `<CHANGE ME>:31337`.
+
+NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
 
 #### Hint 1
 
