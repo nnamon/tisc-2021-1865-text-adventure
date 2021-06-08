@@ -2227,7 +2227,7 @@ public class Serializer implements Callable<byte[]> {
 
 	private final Object object;
 
-	public FSTSerializer(Object object) {
+	public Serializer(Object object) {
 		this.object = object;
 	}
 
