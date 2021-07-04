@@ -99,19 +99,24 @@ This section contains the recommended challenge stage descriptions as well as op
 
 ### 1865 Text Adventure - 1. Down the Rabbit Hole
 
+**Description**
+
+```
 Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
 We want to learn more about the White Rabbit but when we connect to the game, we just keep getting
 lost! Can you help us take a look at the secrets in the Rabbit's burrow?
 
-The game is hosted at `<CHANGE ME>:31337`.
+The game is hosted at <CHANGE ME>:31337.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+No kernel exploits are required for this challenge.
 
-#### Hint 1
+```
+
+**Hint 1**
 
 The goal is to read `flag1` from `/home/rabbit/`.
 
-#### Hint 2
+**Hint 2**
 
 Can you find a way to break out of the illusionary fantasy? Instant travel can be a very good way of
 defying the laws of physics.
