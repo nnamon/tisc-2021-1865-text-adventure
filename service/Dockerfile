@@ -70,6 +70,7 @@ RUN cd $BASE_DIR/a-mad-tea-party && ./build.sh
 # Setup the flags.
 # Flag 1 is from Arbitrary File Read from down-the-rabbithole.
 COPY flags/flag1 /home/$USER1/flag1
+COPY flags/rabbit_description /home/$USER1/.description
 # Flag 2 is from Arbitrary Code Execution from down-the-rabbithole.
 COPY flags/flag2 /home/$USER2/flag2
 # Flag 3 is from Arbitrary Code Execution from pool-of-tears. User needs to run the flag wrapper.

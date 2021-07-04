@@ -102,14 +102,17 @@ This section contains the recommended challenge stage descriptions as well as op
 **Description**
 
 ```
-Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
-We want to learn more about the White Rabbit but when we connect to the game, we just keep getting
-lost! Can you help us take a look at the secrets in the Rabbit's burrow?
+Text adventures are fading ghosts of a faraway past but this one looks suspiciously brand new... and
+it has the signs of PALINDROME all over it.
+
+Our analysts believe that we need to learn more about the White Rabbit but when we connect to the
+game, we just keep getting lost!
+
+Can you help us access the secrets left in the Rabbit's burrow?
 
 The game is hosted at <CHANGE ME>:31337.
 
 No kernel exploits are required for this challenge.
-
 ```
 
 **Hint 1**
@@ -122,7 +125,7 @@ The goal is to read /home/rabbit/flag1.
 
 ```
 Can you find a way to break out of the illusionary fantasy? Instant travel can be a very good way of
-defying the laws of physics.
+defying the laws of (video game) physics.
 ```
 
 ### 1865 Text Adventure - 2. Pool of Tears
@@ -130,9 +133,11 @@ defying the laws of physics.
 **Description**
 
 ```
-It looks like the Rabbit has been misbehaving. Within his cache of secrets lies a special device
-that does not belong to him. However, our attempts read it yield gibberish. It appears to require...
-activation. To activate it, we must first become Rabbit.
+It looks like the Rabbit knew too much about PALINDROME. Within his cache of secrets lies a special
+device that might just unlock clues to tracking down the elusive trickster. However, our attempts
+read it yield pure gibberish.
+
+It appears to require... activation. To activate it, we must first become the Rabbit.
 
 Please assume the identity of the Rabbit.
 
@@ -158,9 +163,12 @@ Find a way to write what you want then take it. If sauerkraut doesn't work, try 
 **Description**
 
 ```
-The flowers said that the French Mouse was invited. But to what? Perhaps she hid the invitation in
-her warren. It is said that her home is decorated with all sorts of oddly shaped mirrors but the
-tragic thing is that she's afraid of her own reflection.
+PALINDROME's taunts are clear: they await us at the Tea Party hosted by the Mad Hatter and
+the March Hare. We need to gain access to it as soon as possible before it's over.
+
+The flowers said that the French Mouse was invited. Perhaps she hid the invitation in her warren. It
+is said that her home is decorated with all sorts of oddly shaped mirrors but the tragic thing is
+that she's afraid of her own reflection.
 
 The game is hosted at <CHANGE ME>:31337.
 
@@ -184,9 +192,17 @@ Can you make strings into constants somehow? Do those constants mean anything to
 **Description**
 
 ```
-Attend the Mad Tea Party but come back with (what's in) the Hatter's head. Sometimes the end of a
-tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
-Do not eat that tiny Hello Kitty.
+Great! We have all we need to attend the Tea Party!
+
+To get an idea of what to expect, we've consulted with our informant (initials C.C) who advised:
+
+"Attend the Mad Tea Party.
+Come back with (what's in) the Hatter's head.
+Sometimes the end of a tale might not be the end of the story.
+Things that don't make logical sense can safely be ignored.
+Do not eat that tiny Hello Kitty."
+
+This is nonsense to us, so you're on your own from here on out.
 
 The game is hosted at <CHANGE ME>:31337.
 

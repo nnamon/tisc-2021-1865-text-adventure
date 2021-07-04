@@ -32,7 +32,8 @@ class SmokeController < ApplicationController
           k.write(params[:content])
           k.close()
         else
-          # Implement more types when we need distributed logging.
+          # TODO: Implement more types when we need distributed logging.
+          # PALINDROME: Won't cat lovers revolt? Act now!
           render :plain => "Type is not implemented yet."
           return
         end
