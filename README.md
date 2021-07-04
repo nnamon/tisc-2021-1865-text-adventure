@@ -114,68 +114,96 @@ No kernel exploits are required for this challenge.
 
 **Hint 1**
 
-The goal is to read `flag1` from `/home/rabbit/`.
+```
+The goal is to read /home/rabbit/flag1.
+```
 
 **Hint 2**
 
+```
 Can you find a way to break out of the illusionary fantasy? Instant travel can be a very good way of
 defying the laws of physics.
+```
 
 ### 1865 Text Adventure - 2. Pool of Tears
 
+**Description**
+
+```
 It looks like the Rabbit has been misbehaving. Within his cache of secrets lies a special device
 that does not belong to him. However, our attempts read it yield gibberish. It appears to require...
 activation. To activate it, we must first become Rabbit.
 
 Please assume the identity of the Rabbit.
 
-The game is hosted at `<CHANGE ME>:31337`.
+The game is hosted at <CHANGE ME>:31337.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+No kernel exploits are required for this challenge.
+```
 
-#### Hint 1
+**Hint 1**
 
-The goal is to execute the SUID binary `flag2.bin` at `/home/rabbit/`.
+```
+The goal is to execute the SUID binary /home/rabbit/flag2.bin.
+```
 
-#### Hint 2
+**Hint 2**
 
+```
 Find a way to write what you want then take it. If sauerkraut doesn't work, try kimchi.
+```
 
 ### 1865 Text Adventure - 3. Advice from a Caterpillar
 
+**Description**
+
+```
 The flowers said that the French Mouse was invited. But to what? Perhaps she hid the invitation in
 her warren. It is said that her home is decorated with all sorts of oddly shaped mirrors but the
 tragic thing is that she's afraid of her own reflection.
 
-The game is hosted at `<CHANGE ME>:31337`.
+The game is hosted at <CHANGE ME>:31337.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+No kernel exploits are required for this challenge.
+```
 
-#### Hint 1
+**Hint 1**
 
-The goal is to execute the SUID binary `flag3.bin` at `/home/mouse/`.
+```
+The goal is to execute the SUID binary /home/mouse/flag3.bin.
+```
 
-#### Hint 2
+**Hint 2**
 
+```
 Can you make strings into constants somehow? Do those constants mean anything to Ruby?
+```
 
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
+**Description**
+
+```
 Attend the Mad Tea Party but come back with (what's in) the Hatter's head. Sometimes the end of a
 tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
 Do not eat that tiny Hello Kitty.
 
-The game is hosted at `<CHANGE ME>:31337`.
+The game is hosted at <CHANGE ME>:31337.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+No kernel exploits are required for this challenge.
+```
 
-#### Hint 1
+**Hint 1**
 
-The goal is to read `flag4` from `/home/hatter`.
+```
+The goal is to read /home/hatter/flag4.
+```
 
-#### Hint 2
+**Hint 2**
 
+```
 You may not know the key but you know the length! Faster unpacking doesn't mean safer unpacking.
+```
 
 ## Services
 
