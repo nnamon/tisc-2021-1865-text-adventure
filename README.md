@@ -128,6 +128,10 @@ Can you find a way to break out of the illusionary fantasy? Instant travel can b
 defying the laws of (video game) physics.
 ```
 
+**Default Flag**
+
+`TISC{r4bbb1t_kn3w_1_pr3f3r_p1}`
+
 ### 1865 Text Adventure - 2. Pool of Tears
 
 **Description**
@@ -158,6 +162,10 @@ The goal is to execute the SUID binary /home/rabbit/flag2.bin.
 Find a way to write what you want then take it. If sauerkraut doesn't work, try kimchi.
 ```
 
+**Default Flag**
+
+`TISC{dr4b_4s_a_f00l_as_al00f_a5_A_b4rd}`
+
 ### 1865 Text Adventure - 3. Advice from a Caterpillar
 
 **Description**
@@ -186,6 +194,10 @@ The goal is to execute the SUID binary /home/mouse/flag3.bin.
 ```
 Can you make strings into constants somehow? Do those constants mean anything to Ruby?
 ```
+
+**Default Flag**
+
+`TISC{mu5t_53ll_4t_th3_t4l13sT_5UM}`
 
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
@@ -220,6 +232,10 @@ The goal is to read /home/hatter/flag4.
 ```
 You may not know the key but you know the length! Faster unpacking doesn't mean safer unpacking.
 ```
+
+**Default Flag**
+
+`TISC{W3_y4wN_A_Mor3_r0m4N_w4y}`
 
 ## Services
 
