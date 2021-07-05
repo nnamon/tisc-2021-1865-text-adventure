@@ -397,8 +397,8 @@ class GetCommand(Command):
 
     def help(self):
         hstr = (
-            'Usage: read [note]\n'
-            'Reads a note on the ground.'
+            'Usage: get [item]\n'
+            'Retrieves an item from the ground.'
         )
         return ('get', hstr)
 

