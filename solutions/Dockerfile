@@ -3,6 +3,7 @@ FROM ubuntu:focal
 # Global Constants
 ENV BASE_DIR=/opt/wonderland
 ENV DEBIAN_FRONTEND="noninteractive"
+ENV COMPILE_YSOSERIAL=0
 
 # Global Dependencies
 RUN apt-get update
@@ -23,8 +24,11 @@ ADD . $BASE_DIR/
 # Setup the scripts.
 RUN pip install -r $BASE_DIR/requirements.txt
 
-# Build the private ysoserial fst fork.
-RUN cd $BASE_DIR/ysoserial-fst-private-master/ && mvn clean package -DskipTests
+# Build the private ysoserial fst fork and override the prebuilt JAR if the flag is set.
+RUN if [ "$COMPILE_YSOSERIAL" -eq "1" ]; then \
+    cd $BASE_DIR/ysoserial-fst-private-master/ && mvn clean package -DskipTests && \
+    cp target/ysoserial-0.0.6-SNAPSHOT-all.jar $BASE_DIR/; \
+fi
 
 # Setup volume.
 VOLUME $BASE_DIR

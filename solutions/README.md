@@ -72,9 +72,9 @@ The executable Python scripts containing the full exploits for each of the stage
 They can be executed like so:
 
 ```shell
-root@4f36819a79aa:/opt/wonderland# ./1_arbitrary_file_read.py
+root@42c70e7d708e:/opt/wonderland# ./1_arbitrary_file_read.py
 [+] Opening connection to 172.17.0.1 on port 31337: Done
-[.\......] Initialising connection. This will take a moment...
+[/] Initialising connection. This will take a moment...
 [*] Moving to the a-shallow-deadend to get the pocket-watch...
 [*] Disabling text scroll.
 [*] Moving to a-curious-hall to drink the pink-bottle...
@@ -84,10 +84,10 @@ root@4f36819a79aa:/opt/wonderland# ./1_arbitrary_file_read.py
 [*] Moving to /home/rabbit
 [*] Reading the flag at /home/rabbit/flag1
 [+] Flag 1:
-[+] TISC{flag1}
+[+] TISC{r4bbb1t_kn3w_1_pr3f3r_p1}
 
-[*] Closed connection to 172.17.0.1 port 31337
-root@4f36819a79aa:/opt/wonderland#
+[*] Switching to interactive mode
+$
 ```
 
 ## Full Writeup
@@ -103,11 +103,17 @@ The writeup does not use the supplied optional hints.
 The challenge text for this stage is:
 
 ```
-Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
-We want to learn more about the White Rabbit but when we connect to the game, we just keep getting
-lost! Can you help us take a look at the secrets in the Rabbit's burrow?
+Text adventures are fading ghosts of a faraway past but this one looks suspiciously brand new... and
+it has the signs of PALINDROME all over it.
 
-The game is hosted at `172.17.0.1:31337`.
+Our analysts believe that we need to learn more about the White Rabbit but when we connect to the
+game, we just keep getting lost!
+
+Can you help us access the secrets left in the Rabbit's burrow?
+
+The game is hosted at 172.17.0.1:31337.
+
+No kernel exploits are required for this challenge.
 ```
 
 #### Background and Initial Experimentation
@@ -120,9 +126,10 @@ exits.
 ```shell
 root@bf77445f0bce:/opt/wonderland# nc 172.17.0.1 31337
 Connected.
-Fracture Runtime Environment v0.0.13 -- (c) 2021 -- Steel Worlds Entertainment
-Multi-User License: 100-0000-000
+Fracture Runtime Environment v31.373.13 -- (c) 2021 -- Steel Worlds Entertainment
+Multi-User License: 100-0000-001
 Loading assets...
+Reversing semordnilaps...
 Generating world...
 ...
 BUMP!
@@ -205,12 +212,17 @@ little hint as to the direction the player should take to progress.
 ```shell
 [a-shallow-deadend] read README
 You read the writing on the note:
+
+Was it a cat I saw?
+His smile was as wide as the world,
+but he never seemed all quite there.
+
 Seek out the Looking Glass, little Alice.
 It just might help to... open your eyes.
 
 In the meantime, here's something to help with a little... introspection.
 
-- The Cheshire Cat
+- PALINDROME
 
 [a-shallow-deadend] get pocket-watch
 You pick up 'pocket-watch'.
@@ -269,6 +281,7 @@ in three bright colours: green, blue, and red.
 
 There are the following things here:
   * pink-bottle (item)
+  * README (note)
   * a-burnt-parchment (note)
   * note-attached-to-bottle (note)
 
@@ -300,7 +313,7 @@ accessible.
 ```shell
 [a-curious-hall] get pink-bottle
 You pick up 'pink-bottle'.
-As you examine the bottle, an overwhelming urge to tip the contents into your mouth overwhelms you. When the pink liquid touches your lips, the croying taste of cakes, and pastries, and pies fills your senses.
+As you examine the bottle, an overwhelming urge to tip the contents into your mouth overwhelms you. When the pink liquid touches your lips, the cloying taste of cakes, and pastries, and pies fills your senses.
 
 However, you realise with horror that the entire world is growing larger...
 Or was it you that was growing smaller?
@@ -309,6 +322,9 @@ You have moved to a new location: 'a-massive-hall'.
 You look around and see:
 Now that you are the size of a rat, the three doors from before tower out of your reach. However,
 you spot a tiny pink door with a tiny brass door knob, perfect for a tiny human.
+
+There are the following things here:
+  * README (note)
 
 You see exits to the:
   * a-pink-door
@@ -357,6 +373,7 @@ china.
 There are the following things here:
   * fluffy-cake (item)
   * note-attached-to-cake (note)
+  * README (note)
 
 [a-fancy-pavillion]
 ```
@@ -412,9 +429,14 @@ Reading the note and picking up the item gives us a hint that a significant even
 ```shell
 [a-mystical-cove] read README
 You read the writing on the note:
+
 Well done, now the story's just begun.
 
-- Cheshire
+However, word of advice -- Evade me, Dave.
+
+Go, do, dog!
+
+- PALINDROME
 
 [a-mystical-cove] get looking-glass
 You pick up 'looking-glass'.
@@ -581,7 +603,11 @@ However, navigating into `rabbit` works and allow us to list the contents.
 You have moved to a new location: 'rabbit'.
 
 You look around and see:
-Darkness fills your senses. Nothing can be discerned from your environment.
+You enter the Rabbit's burrow and find it completely ransacked. Scrawled across the walls of the
+tunnel is a message written in blood: 'Murder for a jar of red rum!'.
+
+Your eyes are drawn to a twinkling letter and lockbox that shines at you from the dirt.
+
 There are the following things here:
   * flag2.bin (note)
   * flag1 (note)
@@ -778,9 +804,9 @@ def main():
 Running the exploit:
 
 ```shell
-root@6c1aa90244ec:/opt/wonderland# ./1_arbitrary_file_read.py
+root@42c70e7d708e:/opt/wonderland# ./1_arbitrary_file_read.py
 [+] Opening connection to 172.17.0.1 on port 31337: Done
-[...\....] Initialising connection. This will take a moment...
+[▅] Initialising connection. This will take a moment...
 [*] Moving to the a-shallow-deadend to get the pocket-watch...
 [*] Disabling text scroll.
 [*] Moving to a-curious-hall to drink the pink-bottle...
@@ -790,7 +816,7 @@ root@6c1aa90244ec:/opt/wonderland# ./1_arbitrary_file_read.py
 [*] Moving to /home/rabbit
 [*] Reading the flag at /home/rabbit/flag1
 [+] Flag 1:
-[+] TISC{flag1}
+[+] TISC{r4bbb1t_kn3w_1_pr3f3r_p1}
 
 [*] Switching to interactive mode
 $
@@ -804,13 +830,17 @@ The full exploit can be found in `1_arbitrary_file_read.py`.
 The challenge text for this stage is:
 
 ```
-It looks like the Rabbit has been misbehaving. Within his cache of secrets lies a special device
-that does not belong to him. However, our attempts read it yield gibberish. It appears to require...
-activation. To activate it, we must first become Rabbit.
+It looks like the Rabbit knew too much about PALINDROME. Within his cache of secrets lies a special
+device that might just unlock clues to tracking down the elusive trickster. However, our attempts
+read it yield pure gibberish.
+
+It appears to require... activation. To activate it, we must first become the Rabbit.
 
 Please assume the identity of the Rabbit.
 
-The game is hosted at `172.17.0.1:31337`.
+The game is hosted at 172.17.0.1:31337.
+
+No kernel exploits are required for this challenge.
 ```
 
 #### Understanding the System
@@ -819,11 +849,12 @@ Since the `flag2.bin` contents look a lot like an ELF file, and the challenge te
 that we assume the identity of the Rabbit, it can be inferred that we need to obtain a shell.
 
 To proceed, we should understand the game using the newfound arbitrary read capability. First, we
-can teleport to the `/opt/wonderland/down-the-rabbithole/` directory.
+can teleport to the `/opt/wonderland/down-the-rabbithole/` directory. This can be reached by
+teleporting to `..` as well.
 
 ```shell
-$ teleport ../../../../../../opt/wonderland/down-the-rabbithole
-You have moved to a new location: 'down-the-rabbithole'.
+$ teleport ..
+You have moved to a new location: '..'.
 
 You look around and see:
 Darkness fills your senses. Nothing can be discerned from your environment.
@@ -838,7 +869,7 @@ You see exits to the:
   * __pycache__
   * art
 
-[down-the-rabbithole] $
+[..] $
 ```
 
 This lets us read some important files such as `generate_items.py` and `rabbithole.py`. The
@@ -1094,6 +1125,7 @@ class SmokeController < ApplicationController
           k.close()
         else
           # Implement more types when we need distributed logging.
+          # PALINDROME: Won't cat lovers revolt? Act now!
           render :plain => "Type is not implemented yet."
           return
         end
@@ -1371,9 +1403,9 @@ we drop into an interactive session.
 Running the exploit:
 
 ```shell
-root@f3c66932cfee:/opt/wonderland# ./2_insecure_dill_loads.py
+root@42c70e7d708e:/opt/wonderland# ./2_insecure_dill_loads.py
 [+] Opening connection to 172.17.0.1 on port 31337: Done
-[↘] Initialising connection. This will take a moment...
+[┤] Initialising connection. This will take a moment...
 [*] Moving to the a-shallow-deadend to get the pocket-watch...
 [*] Disabling text scroll.
 [*] Moving to a-curious-hall to drink the pink-bottle...
@@ -1382,12 +1414,11 @@ root@f3c66932cfee:/opt/wonderland# ./2_insecure_dill_loads.py
 [*] Teleporting to under-a-giant-mushroom to get the golden-hookah...
 [*] Teleporting to /opt/wonderland/logs
 [*] Generating pickle RCE payload...
-[*] Writing payload to 13c0671d-1f84-4ae4-a22f-002f8be16899.item
+[*] Writing payload to 106a07e1-80ea-48e4-80a9-f39b4d957083.item
 [*] Triggering RCE...
 [*] Getting the flag by executing /home/rabbit/flag2.bin
 [+] Flag 2:
-[+] TISC{flag2}
-
+[+] TISC{dr4b_4s_a_f00l_as_al00f_a5_A_b4rd}
 [+] Enjoy your shell!
 [*] Switching to interactive mode
 
@@ -1404,11 +1435,90 @@ The full exploit can be found in `2_insecure_dill_loads.py`.
 The challenge text for this stage is:
 
 ```
-The flowers said that the French Mouse was invited. But to what? Perhaps she hid the invitation in
-her warren. It is said that her home is decorated with all sorts of oddly shaped mirrors but the
-tragic thing is that she's afraid of her own reflection.
+PALINDROME's taunts are clear: they await us at the Tea Party hosted by the Mad Hatter and
+the March Hare. We need to gain access to it as soon as possible before it's over.
 
-The game is hosted at `172.17.0.1:31337`.
+The flowers said that the French Mouse was invited. Perhaps she hid the invitation in her warren. It
+is said that her home is decorated with all sorts of oddly shaped mirrors but the tragic thing is
+that she's afraid of her own reflection.
+
+The game is hosted at 172.17.0.1:31337.
+
+No kernel exploits are required for this challenge.
+```
+
+#### Understanding the Description
+
+Understanding the prompt requires exploring the game world a little. The rooms referenced are the
+following.
+
+The `clearing-of-flowers` features maddened flowers that allude to a stranger interested in
+attending a party.
+
+```shell
+[nearing-a-clearing] $ move clearing-of-flowers
+You have moved to a new location: 'clearing-of-flowers'.
+
+You look around and see:
+Running from the twins now, you burst into a clearing of flowers. The twins forlornly stare after
+you, unable to pass. Their voices fade in the distance as they attempt to finish their poem.
+
+All around you are extremely large flowers, with faces almost. Sad flowers. You notice some shredded
+petals sitting all around you on the ground arranged in a symmetrical pattern, almost like...
+wordplay.
+
+They whisper to you madly, "The talkative one came through here, yes. Talked about pleasant talks,
+pleasant walks, and pleasant parties, yes. The Mouse has an invitation, yes. The talkative one does
+not, no. They will trap him forever, yes."
+
+There are the following things here:
+  * morning-glory (item)
+
+You see exits to the:
+  * under-a-giant-mushroom
+
+[clearing-of-flowers] $
+```
+
+The `tear-in-the-rift` dead end room contains a `README` file containing a hint at 'crashing a
+party'.
+
+```shell
+[cosmic-desert] $ move tear-in-the-rift
+You have moved to a new location: 'tear-in-the-rift'.
+
+You look around and see:
+A curious light shines in the distance. You cannot quite reach it though.
+
+Music tinkles through the rift:
+
+    A very merry unbirthday
+    To you
+    Who, me?
+    Yes, you
+    Oh, me
+    Let's all congratulate us with another cup of tea
+    A very merry unbirthday to you
+
+There are the following things here:
+  * README (note)
+
+[tear-in-the-rift] $ read README
+You read the writing on the note:
+
+Do you hear that? What lovely party sounds!
+
+Wouldn't it be lovely to crash it and get some tea and crumpets?
+
+Too bad you're stuck here!
+
+You can cage a swallow, can't you, but you can't swallow a cage, can you?
+
+Fly back to school now, little starling.
+
+- PALINDROME
+
+[tear-in-the-rift] $
 ```
 
 #### Exploring the Shell
@@ -1556,9 +1666,9 @@ dropped.
 Running the exploit:
 
 ```shell
-root@58cc9472a197:/opt/wonderland# ./3_constantize_send.py
+root@42c70e7d708e:/opt/wonderland# ./3_constantize_send.py
 [+] Opening connection to 172.17.0.1 on port 31337: Done
-[-] Initialising connection. This will take a moment...
+[▘] Initialising connection. This will take a moment...
 [*] Moving to the a-shallow-deadend to get the pocket-watch...
 [*] Disabling text scroll.
 [*] Moving to a-curious-hall to drink the pink-bottle...
@@ -1567,7 +1677,7 @@ root@58cc9472a197:/opt/wonderland# ./3_constantize_send.py
 [*] Teleporting to under-a-giant-mushroom to get the golden-hookah...
 [*] Teleporting to /opt/wonderland/logs
 [*] Generating pickle RCE payload...
-[*] Writing payload to 7f95eb84-7605-4f74-b853-be9b7373b51f.item
+[*] Writing payload to dd2ded97-475e-4c04-b77b-9875923c8283.item
 [*] Triggering RCE...
 [*] Constructing pool-of-tears exploit URL.
 [*] Sending curl request to trigger the creation of the SUID binary.
@@ -1575,8 +1685,7 @@ root@58cc9472a197:/opt/wonderland# ./3_constantize_send.py
 [*] Removing the SUID binary to clean up the tracks.
 [*] Getting the flag by executing /home/mouse/flag3.bin
 [+] Flag 3:
-[+] TISC{flag3}
-
+[+] TISC{mu5t_53ll_4t_th3_t4l13sT_5UM}
 [+] Enjoy your shell!
 [*] Switching to interactive mode
 
@@ -1594,11 +1703,22 @@ The full exploit can be found in `3_constantize_send.py`.
 The challenge text for this stage is:
 
 ```
-Attend the Mad Tea Party but come back with (what's in) the Hatter's head. Sometimes the end of a
-tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
-Do not eat that tiny Hello Kitty.
+Great! We have all we need to attend the Tea Party!
+
+To get an idea of what to expect, we've consulted with our informant (initials C.C) who advised:
+
+"Attend the Mad Tea Party.
+Come back with (what's in) the Hatter's head.
+Sometimes the end of a tale might not be the end of the story.
+Things that don't make logical sense can safely be ignored.
+Do not eat that tiny Hello Kitty."
+
+This is nonsense to us, so you're on your own from here on out.
 
 The game is hosted at `172.17.0.1:31337`.
+
+No kernel exploits are required for this challenge.
+
 ```
 
 #### Finding the Invitation
@@ -1635,10 +1755,12 @@ Dear French Mouse,
 
 PS: Dormouse will be there!
 
+PSPS: No palindromes will be tolerated! Nor are emordnilaps, and semordnilaps!
+
 By the way, please quote the following before entering the party:
 
 
-b320520d-eb5b-4c33-9257-a7ba0f55707c
+031c6d75-63d4-43ea-b40c-07ae9dbdc879
 $
 ```
 
@@ -2518,9 +2640,9 @@ Finally, the flag is retrieved and an interactive shell is dropped.
 Running the exploit:
 
 ```shell
-root@58cc9472a197:/opt/wonderland# ./4_a_mad_tea_party.py
+root@42c70e7d708e:/opt/wonderland# ./4_a_mad_tea_party.py
 [+] Opening connection to 172.17.0.1 on port 31337: Done
-[ ] Initialising connection. This will take a moment...
+[┘] Initialising connection. This will take a moment...
 [*] Moving to the a-shallow-deadend to get the pocket-watch...
 [*] Disabling text scroll.
 [*] Moving to a-curious-hall to drink the pink-bottle...
@@ -2529,35 +2651,34 @@ root@58cc9472a197:/opt/wonderland# ./4_a_mad_tea_party.py
 [*] Teleporting to under-a-giant-mushroom to get the golden-hookah...
 [*] Teleporting to /opt/wonderland/logs
 [*] Generating pickle RCE payload...
-[*] Writing payload to 9194cba7-4819-495c-a0c1-e15687656477.item
+[*] Writing payload to baf21465-9949-4f06-88bb-1848435f13f4.item
 [*] Triggering RCE...
 [*] Constructing pool-of-tears exploit URL.
 [*] Sending curl request to trigger the creation of the SUID binary.
 [*] Triggering the SUID binary to escalate to the mouse user.
 [*] Removing the SUID binary to clean up the tracks.
 [*] Reading the invitation code...
-[+] Got invitation code: b320520d-eb5b-4c33-9257-a7ba0f55707c
+[+] Got invitation code: 031c6d75-63d4-43ea-b40c-07ae9dbdc879
 [*] Successfully entered the party.
 [*] Successfully set a new name to ensure a large enough input size.
 [*] Looking for a suitable cake export...
 [*] Caption Length: 0
 [*] Cake: CoABQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUEQ6fQBIgdWYW5pbGxh
-[*] Digest: ef765522f196f3f4a8375a91231dc465b39106fafd3acf9b538b9ba9445691dd2da9cac8eec7e0de23f5f3e101eb4489d9a4751f3c3c2c13e6100d3e4b539fc5
+[*] Digest: 54915cffbff7b2ce16779ef24fd80270ae8584919a232fede1dea9366259db17177c4095910825b0e4452ffaebd9495ffa74cb0d4ffe4b27548b9f72a70dc264
 [*] Generating FST Deserialization payload to create a hatter SUID binary.
 [*] Constructing the protobuf field from scratch.
 [*] Forging the new cake and digest with the malicious fireworks field.
-./4_a_mad_tea_party.py:226: DeprecationWarning: PY_SSIZE_T_CLEAN will be required for '#' formats
+./4_a_mad_tea_party.py:317: DeprecationWarning: PY_SSIZE_T_CLEAN will be required for '#' formats
   forged_digest, forged_data = hashpumpy.hashpump(cake_struct['digest'], cake_base64,
 [+] New Cake JSON forged successfully!
 [*] Sending the forged JSON.
 [*] Triggering the deserialization to create the hatter SUID binary...
-[∧] Waiting a moment to return back to the shell context...
+[|] Waiting a moment to return back to the shell context...
 [*] Triggering the SUID binary to escalate to the hatter user.
 [*] Removing the SUID binary to clean up the tracks.
 [*] Reading the flag at /home/hatter/flag4
 [+] Flag 4:
-[+]
-    TISC{flag4}
+[+] TISC{W3_y4wN_A_Mor3_r0m4N_w4y}
 [+] Enjoy your shell!
 [*] Switching to interactive mode
 
@@ -2570,13 +2691,18 @@ A congratulation message can be found at `/home/hatter` to conclude things.
 
 ```shell
 $ cat congratulations.txt
-Congratulations Alice!
+Congratulations, my little Alice!
 
-You have reached the end of this challenge.
+This world is
+Never odd or even
+You almost caught me but
+Too bad, I hid a boot
+At least
+I met System I
 
-You may rest for now but many stories await in the future!
+Have your little breadcrumb, you earned it.
 
-- Cheshire
+- PALINDROME
 $
 ```
 

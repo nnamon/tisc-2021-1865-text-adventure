@@ -60,7 +60,7 @@ def pink_bottle_on_get(self):
     '''
     letterwise_print('As you examine the bottle, an overwhelming urge to tip the contents into '
                      'your mouth overwhelms you. When the pink liquid touches your lips, the '
-                     'croying taste of cakes, and pastries, and pies fills your senses.\n')
+                     'cloying taste of cakes, and pastries, and pies fills your senses.\n')
     letterwise_print('However, you realise with horror that the entire world is growing larger...')
     sleep(1)
     letterwise_print('Or was it you that was growing smaller?')

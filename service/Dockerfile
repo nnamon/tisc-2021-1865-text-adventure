@@ -3,15 +3,16 @@ FROM ubuntu:focal
 # Global Constants
 ENV BASE_DIR=/opt/wonderland
 ENV LISTEN_PORT=31337
+ENV PROCESS_LIMIT=100
 ENV USER1=rabbit
 ENV USER2=mouse
 ENV USER3=hatter
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Some protections
-RUN echo "$USER1     hard    nproc       50" >> /etc/security/limits.conf
-RUN echo "$USER2     hard    nproc       50" >> /etc/security/limits.conf
-RUN echo "$USER3     hard    nproc       50" >> /etc/security/limits.conf
+RUN echo "$USER1     hard    nproc       $PROCESS_LIMIT" >> /etc/security/limits.conf
+RUN echo "$USER2     hard    nproc       $PROCESS_LIMIT" >> /etc/security/limits.conf
+RUN echo "$USER3     hard    nproc       $PROCESS_LIMIT" >> /etc/security/limits.conf
 
 # Global Dependencies
 RUN apt-get update
@@ -64,12 +65,14 @@ RUN echo '*/4 * * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' >> /etc/crontab
 RUN python -c 'import uuid;print(uuid.uuid4())' > /home/$USER3/invitation_code
 RUN python -c 'import os, sys;sys.stdout.buffer.write(os.urandom(32))' > /home/$USER3/secret
 COPY a-mad-tea-party/an-unbirthday-invitation.letter /home/$USER2/an-unbirthday-invitation.letter
+RUN rm a-mad-tea-party/an-unbirthday-invitation.letter
 RUN cat /home/$USER3/invitation_code >> /home/$USER2/an-unbirthday-invitation.letter
 RUN cd $BASE_DIR/a-mad-tea-party && ./build.sh
 
 # Setup the flags.
 # Flag 1 is from Arbitrary File Read from down-the-rabbithole.
 COPY flags/flag1 /home/$USER1/flag1
+COPY flags/rabbit_description /home/$USER1/.description
 # Flag 2 is from Arbitrary Code Execution from down-the-rabbithole.
 COPY flags/flag2 /home/$USER2/flag2
 # Flag 3 is from Arbitrary Code Execution from pool-of-tears. User needs to run the flag wrapper.

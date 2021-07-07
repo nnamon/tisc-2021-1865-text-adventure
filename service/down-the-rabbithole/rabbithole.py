@@ -118,10 +118,12 @@ def print_banner():
     '''
     pprint('Connected.')
     sleep()
-    pprint('Fracture Runtime Environment v0.0.13 -- (c) 2021 -- Steel Worlds Entertainment')
-    pprint('Multi-User License: 100-0000-000')
+    pprint('Fracture Runtime Environment v31.373.13 -- (c) 2021 -- Steel Worlds Entertainment')
+    pprint('Multi-User License: 100-0000-001')
     sleep()
     letterwise_print('Loading assets...')
+    sleep()
+    letterwise_print('Reversing semordnilaps...')
     sleep()
     letterwise_print('Generating world...')
     sleep(1.5)
@@ -395,8 +397,8 @@ class GetCommand(Command):
 
     def help(self):
         hstr = (
-            'Usage: read [note]\n'
-            'Reads a note on the ground.'
+            'Usage: get [item]\n'
+            'Retrieves an item from the ground.'
         )
         return ('get', hstr)
 

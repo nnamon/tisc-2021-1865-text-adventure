@@ -180,9 +180,9 @@ def main():
     # Get the flag.
     log.info('Getting the flag by executing /home/mouse/flag3.bin')
     log.success('Flag 3:')
-    c.sendline('/home/mouse/flag3.bin')
-    c.sendline('echo END_OF_FLAG')
-    log.success(c.recvuntil(b'END_OF_FLAG').replace(b'END_OF_FLAG', b''))
+    c.sendline('/home/mouse/flag3.bin\n\n')
+    c.sendline('echo END_OF_FLAG\n\n')
+    log.success(c.recvuntil(b'END_OF_FLAG').replace(b'END_OF_FLAG', b'').strip())
 
     # Drop into an interactive shell.
     log.success('Enjoy your shell!')

@@ -40,6 +40,13 @@ included with the solutions in this submission.
 
 ![Introduction to the Game](img/alice_in_wonderland_intro.gif)
 
+### Challenge Theme
+
+The challenge was written for TISC 2021. The storyline for the CTF involves a major cyber attack
+disrupting several of Singapore's critical infrastructure and cyber space assets. The participants
+are cybersecurity experts pursuing the malicious and mischevious threat actor, PALINDROME. This
+challenge loosely follows this premise and contains references to the entity.
+
 ### Summary of the Stages
 
 The following stages each have a corresponding flag:
@@ -99,78 +106,143 @@ This section contains the recommended challenge stage descriptions as well as op
 
 ### 1865 Text Adventure - 1. Down the Rabbit Hole
 
-Text adventures are fading ghosts of a long time past but this one looks suspiciously brand new.
-We want to learn more about the White Rabbit but when we connect to the game, we just keep getting
-lost! Can you help us take a look at the secrets in the Rabbit's burrow?
+**Description**
 
-The game is hosted at `<CHANGE ME>:31337`.
+```
+Text adventures are fading ghosts of a faraway past but this one looks suspiciously brand new... and
+it has the signs of PALINDROME all over it.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+Our analysts believe that we need to learn more about the White Rabbit but when we connect to the
+game, we just keep getting lost!
 
-#### Hint 1
+Can you help us access the secrets left in the Rabbit's burrow?
 
-The goal is to read `flag1` from `/home/rabbit/`.
+The game is hosted at <CHANGE ME>:31337.
 
-#### Hint 2
+No kernel exploits are required for this challenge.
+```
 
+**Hint 1**
+
+```
+The goal is to read /home/rabbit/flag1.
+```
+
+**Hint 2**
+
+```
 Can you find a way to break out of the illusionary fantasy? Instant travel can be a very good way of
-defying the laws of physics.
+defying the laws of (video game) physics.
+```
+
+**Default Flag**
+
+`TISC{r4bbb1t_kn3w_1_pr3f3r_p1}`
 
 ### 1865 Text Adventure - 2. Pool of Tears
 
-It looks like the Rabbit has been misbehaving. Within his cache of secrets lies a special device
-that does not belong to him. However, our attempts read it yield gibberish. It appears to require...
-activation. To activate it, we must first become Rabbit.
+**Description**
+
+```
+It looks like the Rabbit knew too much about PALINDROME. Within his cache of secrets lies a special
+device that might just unlock clues to tracking down the elusive trickster. However, our attempts
+read it yield pure gibberish.
+
+It appears to require... activation. To activate it, we must first become the Rabbit.
 
 Please assume the identity of the Rabbit.
 
-The game is hosted at `<CHANGE ME>:31337`.
+The game is hosted at <CHANGE ME>:31337.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+No kernel exploits are required for this challenge.
+```
 
-#### Hint 1
+**Hint 1**
 
-The goal is to execute the SUID binary `flag2.bin` at `/home/rabbit/`.
+```
+The goal is to execute the SUID binary /home/rabbit/flag2.bin.
+```
 
-#### Hint 2
+**Hint 2**
 
+```
 Find a way to write what you want then take it. If sauerkraut doesn't work, try kimchi.
+```
+
+**Default Flag**
+
+`TISC{dr4b_4s_a_f00l_as_al00f_a5_A_b4rd}`
 
 ### 1865 Text Adventure - 3. Advice from a Caterpillar
 
-The flowers said that the French Mouse was invited. But to what? Perhaps she hid the invitation in
-her warren. It is said that her home is decorated with all sorts of oddly shaped mirrors but the
-tragic thing is that she's afraid of her own reflection.
+**Description**
 
-The game is hosted at `<CHANGE ME>:31337`.
+```
+PALINDROME's taunts are clear: they await us at the Tea Party hosted by the Mad Hatter and
+the March Hare. We need to gain access to it as soon as possible before it's over.
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+The flowers said that the French Mouse was invited. Perhaps she hid the invitation in her warren. It
+is said that her home is decorated with all sorts of oddly shaped mirrors but the tragic thing is
+that she's afraid of her own reflection.
 
-#### Hint 1
+The game is hosted at <CHANGE ME>:31337.
 
-The goal is to execute the SUID binary `flag3.bin` at `/home/mouse/`.
+No kernel exploits are required for this challenge.
+```
 
-#### Hint 2
+**Hint 1**
 
+```
+The goal is to execute the SUID binary /home/mouse/flag3.bin.
+```
+
+**Hint 2**
+
+```
 Can you make strings into constants somehow? Do those constants mean anything to Ruby?
+```
+
+**Default Flag**
+
+`TISC{mu5t_53ll_4t_th3_t4l13sT_5UM}`
 
 ### 1865 Text Adventure - 4. A Mad Tea Party
 
-Attend the Mad Tea Party but come back with (what's in) the Hatter's head. Sometimes the end of a
-tale might not be the end of the story. Things that don't make logical sense can safely be ignored.
-Do not eat that tiny Hello Kitty.
+**Description**
 
-The game is hosted at `<CHANGE ME>:31337`.
+```
+Great! We have all we need to attend the Tea Party!
 
-NO KERNEL EXPLOITS ARE REQUIRED FOR THIS CHALLENGE.
+To get an idea of what to expect, we've consulted with our informant (initials C.C) who advised:
 
-#### Hint 1
+"Attend the Mad Tea Party.
+Come back with (what's in) the Hatter's head.
+Sometimes the end of a tale might not be the end of the story.
+Things that don't make logical sense can safely be ignored.
+Do not eat that tiny Hello Kitty."
 
-The goal is to read `flag4` from `/home/hatter`.
+This is nonsense to us, so you're on your own from here on out.
 
-#### Hint 2
+The game is hosted at <CHANGE ME>:31337.
 
+No kernel exploits are required for this challenge.
+```
+
+**Hint 1**
+
+```
+The goal is to read /home/hatter/flag4.
+```
+
+**Hint 2**
+
+```
 You may not know the key but you know the length! Faster unpacking doesn't mean safer unpacking.
+```
+
+**Default Flag**
+
+`TISC{W3_y4wN_A_Mor3_r0m4N_w4y}`
 
 ## Services
 
