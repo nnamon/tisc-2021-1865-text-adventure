@@ -40,6 +40,13 @@ included with the solutions in this submission.
 
 ![Introduction to the Game](img/alice_in_wonderland_intro.gif)
 
+### Challenge Theme
+
+The challenge was written for TISC 2021. The storyline for the CTF involves a major cyber attack
+disrupting several of Singapore's critical infrastructure and cyber space assets. The participants
+are cybersecurity experts pursuing the malicious and mischevious threat actor, PALINDROME. This
+challenge loosely follows this premise and contains references to the entity.
+
 ### Summary of the Stages
 
 The following stages each have a corresponding flag:
