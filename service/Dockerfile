@@ -58,8 +58,8 @@ RUN chmod -R 770 $BASE_DIR/pool-of-tears/tmp
 RUN chmod -R 770 $BASE_DIR/pool-of-tears/log
 RUN chmod +x $BASE_DIR/pool-of-tears/run.sh
 RUN cd $BASE_DIR/pool-of-tears/ && bundle install
-RUN echo '*/4 * * * * mouse /usr/bin/rm '$BASE_DIR'/logs/*' >> /etc/crontab
-RUN echo '*/4 * * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' >> /etc/crontab
+RUN echo '0 */8 * * * mouse /usr/bin/rm '$BASE_DIR'/logs/*' >> /etc/crontab
+RUN echo '0 */8 * * * mouse '$BASE_DIR'/utils/clean_tmp.sh' >> /etc/crontab
 
 # Setup the a-mad-tea-party service.
 RUN python -c 'import uuid;print(uuid.uuid4())' > /home/$USER3/invitation_code
