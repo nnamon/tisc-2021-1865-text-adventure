@@ -162,8 +162,8 @@ def print_banner():
 
 def main():
     # Setup some limit on how long a player can stay connected.
-    # 15 Minutes
-    seconds = 15 * 60
+    # 8 Hours
+    seconds = 60 * 60 * 8
     signal.alarm(seconds)
 
     # Start the game for real.
